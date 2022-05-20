@@ -19,8 +19,49 @@ public class CrosswordController {
 	 * the initial state of a crossword puzzle
 	 */
 	public void initCrossword(String[][] puzzle) {
-		
-		
+
+		int rows= puzzle.length;
+		int columns= puzzle[0].length;
+
+		crossword = new Cell[rows][columns];
+
+		String letter = "";
+		int number = 0;
+		int cont = 0;
+
+		CellType state = null;
+
+		for(int i=0 ;i<rows ; i++) {
+			
+			for(int j=0 ;j<columns ; j++) {
+
+				if(puzzle[i][j] != " ") {
+
+					cont++;
+
+					state = CellType.CLOSED;
+
+					letter = puzzle[i][j];
+					number = cont;
+
+					Cell cell = new Cell(state,letter,number);
+					crossword[i][j] = cell;
+
+
+				} else {
+
+					state = CellType.BLACK;
+
+					Cell cell = new Cell(state,letter,number);
+
+					crossword[i][j] = cell;
+
+				}
+			}
+		}
+
+
+	
 	}
 	/**
 	 * Method to verify if a crossword puzzle is initialized
@@ -51,8 +92,38 @@ public class CrosswordController {
 	 * @return
 	 */
 	public String getHint(String letter) {
+
+		int rows= crossword.length;
+		int columns = crossword[0].length;
+
+		String out = "";
+		int cont = 0;
+
+		boolean flag = false;
+
+		for(int i=0 ;i<rows ; i++) {
+			
+			for(int j=0 ;j<columns ; j++) {
+				
+				if(flag != true){
+
+					if(crossword[i][j].getLetter().equals(letter) && crossword[i][j].getState().equals(CellType.CLOSED) ) {	
+
+					cont = crossword[i][j].getNumber();
+					crossword[i][j].setState(CellType.OPEN);
+					out = "Hay una palabra con esa letra " + letter + "  en el crucigrama en la casilla " + cont;
+
+					flag = true;
+
+					} else {
+
+						out = "Lo siento, no hay palabras con la letra " + letter;
+					}
+				}
+			}
+		}
 		
-		return null;
+		return out;
 	}
 	
 	/**
